@@ -5,7 +5,7 @@ import pygame
 
 class Simulator(object):
     """PyGame-based simulator to create a dynamic environment."""
-
+    
     colors = {
         'black'   : (  0,   0,   0),
         'white'   : (255, 255, 255),
@@ -17,7 +17,7 @@ class Simulator(object):
         'yellow'  : (255, 255,   0),
         'orange'  : (255, 128,   0)
     }
-
+    
     def __init__(self, env, size=None, frame_delay=10, update_delay=1.0):
         self.env = env
         self.size = size if size is not None else ((self.env.grid_size[0] + 1) * self.env.block_size, (self.env.grid_size[1] + 1) * self.env.block_size)
@@ -108,20 +108,20 @@ class Simulator(object):
                 pygame.draw.line(self.screen, self.colors['green'],
                     (intersection[0] * self.env.block_size - 15, intersection[1] * self.env.block_size),
                     (intersection[0] * self.env.block_size + 15, intersection[1] * self.env.block_size), self.road_width)
-
+        
         # * Dynamic elements
         for agent, state in self.env.agent_states.iteritems():
             # Compute precise agent location here (back from the intersection some)
             agent_offset = (2 * state['heading'][0] * self.agent_circle_radius, 2 * state['heading'][1] * self.agent_circle_radius)
             agent_pos = (state['location'][0] * self.env.block_size - agent_offset[0], state['location'][1] * self.env.block_size - agent_offset[1])
             agent_color = self.colors[agent.color]
-            if hasattr(agent, '_sprite') and agent._sprite is not None:
+            if hasattr(agent, '_sprite') and agent._sprite is not None: # if the agent has an image
                 # Draw agent sprite (image), properly rotated
                 rotated_sprite = agent._sprite if state['heading'] == (1, 0) else pygame.transform.rotate(agent._sprite, 180 if state['heading'][0] == -1 else state['heading'][1] * -90)
                 self.screen.blit(rotated_sprite,
                     pygame.rect.Rect(agent_pos[0] - agent._sprite_size[0] / 2, agent_pos[1] - agent._sprite_size[1] / 2,
                         agent._sprite_size[0], agent._sprite_size[1]))
-            else:
+            else: # if there is no image
                 # Draw simple agent (circle with a short line segment poking out to indicate heading)
                 pygame.draw.circle(self.screen, agent_color, agent_pos, self.agent_circle_radius)
                 pygame.draw.line(self.screen, agent_color, agent_pos, state['location'], self.road_width)
@@ -130,16 +130,16 @@ class Simulator(object):
             if state['destination'] is not None:
                 pygame.draw.circle(self.screen, agent_color, (state['destination'][0] * self.env.block_size, state['destination'][1] * self.env.block_size), 6)
                 pygame.draw.circle(self.screen, agent_color, (state['destination'][0] * self.env.block_size, state['destination'][1] * self.env.block_size), 15, 2)
-
-        # * Overlays
+        
+        # * Overlays: This is the text on the top left corner
         text_y = 10
         for text in self.env.status_text.split('\n'):
             self.screen.blit(self.font.render(text, True, self.colors['red'], self.bg_color), (100, text_y))
             text_y += 20
-
+        
         # Flip buffers
         pygame.display.flip()
-
+    
     def pause(self):
         abs_pause_time = time.time()
         pause_text = "[PAUSED] Press any key to continue..."
