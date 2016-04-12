@@ -49,7 +49,7 @@ class LearningAgent(Agent):
 
 
 def run():
-    """Run the agent for finite number of trials."""
+    """Run the agent for a finite number of trials."""
     # Set up environment and agent
     env = Environment()  # create environment and add (3) dummy agents
     ## Create agent primary agent
@@ -58,6 +58,7 @@ def run():
     
     # Now simulate it
     sim = Simulator(env, update_delay=0.80)  # reduce update_delay to speed up simulation
+    ## Each trial is a distinct game?
     sim.run(n_trials=10)  # press Esc or close pygame window to quit
 
 if __name__ == '__main__':
