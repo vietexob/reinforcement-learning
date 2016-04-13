@@ -127,8 +127,11 @@ class Environment(object):
                 self.done = True
                 print "Environment.reset(): Primary agent could not reach destination within deadline!"
             self.agent_states[self.primary_agent]['deadline'] -= 1 # decrement the deadline of primary agent
-
+    
     def sense(self, agent):
+        '''
+        This is weird -- normally the agent senses the env, not the env senses it self for the agent!
+        '''
         ## Make sure the agent is one of those created
         assert agent in self.agent_states, "Unknown agent!"
         
@@ -166,12 +169,13 @@ class Environment(object):
         assert agent in self.agent_states, "Unknown agent!"
         assert action in self.valid_actions, "Invalid action!"
         
-        state = self.agent_states[agent]
+        state = self.agent_states[agent] # the agent's current state
         location = state['location']
         heading = state['heading']
         light = 'green' if (self.intersections[location].state and heading[1] != 0) or ((not self.intersections[location].state) and heading[0] != 0) else 'red'
         
         # Move the agent if within bounds and obey traffic rules
+        ## Note that the prescribed action translates into the new heading
         reward = 0  # reward/penalty
         move_okay = True
         if action == 'forward':
@@ -184,7 +188,7 @@ class Environment(object):
             else:
                 move_okay = False
         elif action == 'right':
-            ## Can always turn right no matter what traffic light is (?)
+            ## Can always turn right no matter what traffic light is (right of way has been handled by the agent)
             heading = (-heading[1], heading[0]) # update the heading tuple
         
         if action is not None:
@@ -200,10 +204,11 @@ class Environment(object):
                 ## Reward if action matches next waypoint
                 reward = 2 if action == agent.get_next_waypoint() else 0.5
             else:
+                ## TODO: Why is the move not executed (state unchanged)? Does the env bans illegal move?
                 ## Penalize if action violates traffic rules
                 reward = -1
         else:
-            ## Reward if do nothing
+            ## Reward for doing nothing
             reward = 1
         
         ## Check if destination has been reached (in time)
@@ -255,7 +260,7 @@ class DummyAgent(Agent):
         inputs = self.env.sense(self)
         action_okay = True
         
-        ## Check if traffic rules are obeyed
+        ## Check if right of way is obeyed
         if self.next_waypoint == 'right': # wants to turn right
             ## Cannot turn right on red light if traffic on the left moves forward (goes straight)
             if inputs['light'] == 'red' and inputs['left'] == 'forward':

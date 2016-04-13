@@ -8,7 +8,7 @@ class LearningAgent(Agent):
 
     def __init__(self, env):
         super(LearningAgent, self).__init__(env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
-        self.color = 'red'  # override color
+        self.color = 'red'  # override default color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         # TODO: Initialize any additional variables here
 
@@ -19,30 +19,35 @@ class LearningAgent(Agent):
     def update(self, t):
         '''
         At each time step t, the agent:
-        - Is given the next waypoint location (relative to its current location and direction)
+        - Is given the next waypoint (relative to its current location and direction)
         - Senses the intersection state (traffic light and presence of other vehicles)
         - Gets the current deadline value (time remaining)
         '''
         # Gather inputs
         self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
         
-        ## The state variables
+        ## The observations
         inputs = self.env.sense(self)
         light = inputs['light']
         oncoming = inputs['oncoming']
         right = inputs['right']
         left = inputs['left']
-        deadline = self.env.get_deadline(self)
         
-        # TODO: Update state
-        
-        # TODO: Select action according to your policy
-#         action = self.next_waypoint
-        action = random.choice(self.env.valid_actions)
+        ## Select either a random action or go with the planner's prescribed waypoint
+        rand_action = random.choice(self.env.valid_actions)
+        rand_num = random.random()
+        action = self.next_waypoint if rand_num <= 0.50 else rand_action
         
         # Execute action and get reward
         reward = self.env.act(self, action)
-
+        
+        # Update state variables: location, heading and deadline
+        location = self.env.agent_states[self]['location']
+        heading = self.env.agent_states[self]['heading']
+        deadline = self.env.get_deadline(self)
+        self.state = {'location': location, 'heading': heading, 'deadline': deadline}
+        print (location, heading, deadline)
+        
         # TODO: Learn policy based on state, action, reward
 
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
