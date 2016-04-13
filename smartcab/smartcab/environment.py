@@ -192,15 +192,24 @@ class Environment(object):
             heading = (-heading[1], heading[0]) # update the heading tuple
         
         if action is not None:
+            ## Update the current location (intersection)
+            location = ((location[0] + heading[0] - self.bounds[0]) % (self.bounds[2] - self.bounds[0] + 1) + self.bounds[0],
+                        (location[1] + heading[1] - self.bounds[1]) % (self.bounds[3] - self.bounds[1] + 1) + self.bounds[1])  # wrap-around
+            #if self.bounds[0] <= location[0] <= self.bounds[2] and self.bounds[1] <= location[1] <= self.bounds[3]:  # bounded
+            
+            ## Update the location and heading
+            state['location'] = location
+            state['heading'] = heading
+            
             if move_okay:
-                ## Update the current location (intersection)
-                location = ((location[0] + heading[0] - self.bounds[0]) % (self.bounds[2] - self.bounds[0] + 1) + self.bounds[0],
-                            (location[1] + heading[1] - self.bounds[1]) % (self.bounds[3] - self.bounds[1] + 1) + self.bounds[1])  # wrap-around
-                #if self.bounds[0] <= location[0] <= self.bounds[2] and self.bounds[1] <= location[1] <= self.bounds[3]:  # bounded
-                
-                ## Update the location and heading
-                state['location'] = location
-                state['heading'] = heading
+#                 ## Update the current location (intersection)
+#                 location = ((location[0] + heading[0] - self.bounds[0]) % (self.bounds[2] - self.bounds[0] + 1) + self.bounds[0],
+#                             (location[1] + heading[1] - self.bounds[1]) % (self.bounds[3] - self.bounds[1] + 1) + self.bounds[1])  # wrap-around
+#                 #if self.bounds[0] <= location[0] <= self.bounds[2] and self.bounds[1] <= location[1] <= self.bounds[3]:  # bounded
+#                 
+#                 ## Update the location and heading
+#                 state['location'] = location
+#                 state['heading'] = heading
                 ## Reward if action matches next waypoint
                 reward = 2 if action == agent.get_next_waypoint() else 0.5
             else:
