@@ -1,4 +1,5 @@
 import sys
+import math
 import random
 from environment import Agent, Environment
 from planner import RoutePlanner
@@ -7,7 +8,7 @@ from simulator import Simulator
 class LearningAgent(Agent):
     """An agent that learns how to drive in the smartcab world."""
 
-    def __init__(self, env, init_value=0, gamma=0.95, alpha=0.10, epsilon=0.10):
+    def __init__(self, env, init_value=0, gamma=0.80, alpha=0.20, epsilon=0.10):
         super(LearningAgent, self).__init__(env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
         self.color = 'red'  # override default color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
@@ -19,14 +20,54 @@ class LearningAgent(Agent):
         ## Discount factor gamma: 0 (myopic) vs 1 (long-term optimal)
         self.gamma = gamma
         ## Learning rate alpha: 0 (no learning) vs 1 (consider only most recent information)
+        ## NOTE: Normally, alpha decreases over time: for example, alpha = 1 / t
         self.alpha = alpha
         ## Parameter of the epsilon-greedy action selection strategy
+        ## NOTE: Normally, epsilon should also be decayed by the number of trials
         self.epsilon = epsilon
+        
+        ## The trial number
+        self.trial = 1
+        ## The cumulative reward
+        self.cumulative_reward = 0
         
     def reset(self, destination=None):
         self.planner.route_to(destination)
+        print len(self.q_function.keys())
+        self.trial += 1
+        ## Decay the epsilon parameter
+#         self.epsilon = self.epsilon / math.sqrt(self.trial)
         # TODO: Prepare for a new trip; reset any variables here, if required
+        self.cumulative_reward = 0
     
+    def select_action(self, state=None, is_current=True, t=1):
+        '''
+        Implements the epsilon-greedy action selection that selects the best-valued action in this state
+        (if is_current) with probability (1 - epsilon) and a random action with probability epsilon.
+        't' is the current time step that can be used to modify epsilon.
+        '''
+        if state in self.q_function:
+            ## Find the action that has the highest value
+            action_function = self.q_function[state]
+            q_action = max(action_function, key = action_function.get)
+            if is_current:
+                ## Generate a random action
+                rand_action = random.choice(self.env.valid_actions)
+                ## Select action using epsilon-greedy heuristic
+                rand_num = random.random()
+                action = q_action if rand_num <= (1 - self.epsilon) else rand_action
+            else:
+                action = q_action
+        else:
+            ## Initialize <state, action> pairs and select random action
+            action_function = {}
+            for action in self.env.valid_actions:
+                action_function[action] = self.init_value
+            self.q_function[state] = action_function
+            action = random.choice(self.env.valid_actions)        
+        
+        return action
+        
     def update(self, t):
         '''
         At each time step t, the agent:
@@ -35,7 +76,7 @@ class LearningAgent(Agent):
         - Gets the current deadline value (time remaining)
         '''
         ## The destination trying to reach
-        destination = self.env.agent_states[self]['destination']
+#         destination = self.env.agent_states[self]['destination']
         
         ## Observe the current state variables
         ## (1) Traffic variables
@@ -46,38 +87,25 @@ class LearningAgent(Agent):
         left = inputs['left']
         ## (2) Direction variables
         self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
-        deadline = self.env.get_deadline(self)
-        location = self.env.agent_states[self]['location']
-        distance = self.env.compute_dist(location, destination)
-        heading = self.env.agent_states[self]['heading']
+#         deadline = self.env.get_deadline(self)
+#         location = self.env.agent_states[self]['location']
+#         distance = self.env.compute_dist(location, destination)
+#         heading = self.env.agent_states[self]['heading']
         
         ## Update the current observed state
-        self.state = (light, oncoming, left,
-                      deadline, self.next_waypoint, distance, heading)
+        self.state = (light, oncoming, left, self.next_waypoint)
+        current_state = self.state # save this for future use
         
-        ## TODO: Implement the epsilon-greedy action selection that selects best-valued action in this state
-        ## with probability (1 - epsilon) and a random action with probability epsilon.
-        if self.state in self.q_function:
-            action_function = self.q_function[self.state]
-            action_keys = action_function.keys()
-            if len(action_keys) != len(self.env.valid_actions):
-                print('State = ' + str(self.state))
-                sys.exit("Keys do not cover valid actions: " + str(action_keys))
-            
-            ## TODO: Find the action that has the highest value
-            
-            rand_action = random.choice(self.env.valid_actions)
-            action = rand_action
-        else:
-            ## Initialize <state, action> pairs and select random action
-            action_function = {}
-            for action in self.env.valid_actions:
-                action_function[action] = self.init_value
-            self.q_function[self.state] = action_function
-            action = random.choice(self.env.valid_actions)        
-        
+        ## Select the current action
+        action = self.select_action(state=current_state, is_current=True, t=t)
         ## Execute action, get reward and new state
         reward = self.env.act(self, action)
+        self.cumulative_reward += reward
+        self.env.set_cumulative_reward(self.cumulative_reward)
+        
+        ## Retrieve the current Q-value
+        current_q = self.q_function[self.state][action]
+        print 'Current Q = ' + str(current_q)
         
         ## Update the state variables after action
         ## (1) Traffic variables 
@@ -88,15 +116,24 @@ class LearningAgent(Agent):
         ## (2) Direction variables
         self.next_waypoint = self.planner.next_waypoint()
         deadline = self.env.get_deadline(self)
-        location = self.env.agent_states[self]['location']
-        distance = self.env.compute_dist(location, destination)
-        heading = self.env.agent_states[self]['heading']
+#         location = self.env.agent_states[self]['location']
+#         distance = self.env.compute_dist(location, destination)
+#         heading = self.env.agent_states[self]['heading']
         
         ## Update the new state, which is a tuple of state variables
-        self.state = (light, oncoming, left,
-                      deadline, self.next_waypoint, distance, heading)
+        self.state = (light, oncoming, left, self.next_waypoint)
+        ## Get the best q_action in the new state
+        new_action = self.select_action(state=self.state, is_current=False, t=t)    
+        ## Get the new Q_value
+        new_q = self.q_function[self.state][new_action]
         
-        # TODO: Learn policy based on state, action, reward
+        ## Update the Q-function
+#         if (current_state == self.state) and (action is not None):
+#             print (action, current_state, self.state)
+#             sys.exit()
+        current_alpha = self.alpha
+        self.q_function[current_state][action] = (1 - current_alpha) * current_q + current_alpha * (reward + self.gamma * new_q)
+        print 'Updated Q = ' + str(self.q_function[current_state][action])
         
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
@@ -104,15 +141,20 @@ def run():
     """Run the agent for a finite number of trials."""
     # Set up environment and agent
     ## TODO: Delete n_dummies in final submission
-    env = Environment(n_dummies=3)  # create environment and add (3) dummy agents
+    ## Create a log file for the environment for each run
+    log_filename = '../smartcab.log'
+    fw = open(log_filename, 'w')
+    env = Environment(n_dummies=3, fw=fw)  # create environment and add (3) dummy agents
+    
     ## Create agent primary agent
     agent = env.create_agent(LearningAgent)  # create a learning agent
-    env.set_primary_agent(agent, enforce_deadline=False)  # set agent to track
+    env.set_primary_agent(agent, enforce_deadline=True)  # set agent to track
     
     # Now simulate it
-    sim = Simulator(env, update_delay=0.80)  # reduce update_delay to speed up simulation
+    sim = Simulator(env, update_delay=0.10)  # reduce update_delay to speed up simulation
     ## Each trial is a distinct game?
-    sim.run(n_trials=2)  # press Esc or close pygame window to quit
+    sim.run(n_trials=100)  # press Esc or close pygame window to quit
+    fw.close() # close the log writer
 
 if __name__ == '__main__':
     run()

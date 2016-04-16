@@ -35,11 +35,13 @@ class Environment(object):
                     'right': valid_actions}
     valid_headings = [(1, 0), (0, -1), (-1, 0), (0, 1)]  # East, North, West, South
     
-    def __init__(self, n_dummies=3):
+    def __init__(self, n_dummies=3, fw=None):
         self.done = False
         self.t = 0
         self.agent_states = OrderedDict()
         self.status_text = ""
+        self.fw = fw # the log file writer
+        self.cumulative_reward = 0
         
         # Road network
         self.grid_size = (8, 6)  # (cols, rows)
@@ -70,6 +72,9 @@ class Environment(object):
         self.primary_agent = None  # to be set explicitly
         self.enforce_deadline = False
     
+    def set_cumulative_reward(self, cumulative_reward=0):
+        self.cumulative_reward = cumulative_reward
+        
     def create_agent(self, agent_class, *args, **kwargs):
         agent = agent_class(self, *args, **kwargs)
         ## All agents initially head South?
@@ -125,7 +130,10 @@ class Environment(object):
         if self.primary_agent is not None:
             if self.enforce_deadline and self.agent_states[self.primary_agent]['deadline'] <= 0:
                 self.done = True
-                print "Environment.reset(): Primary agent could not reach destination within deadline!"
+                output_str = "Environment.reset(): Primary agent could not reach destination within deadline!\n"
+                output_str += 'Cumulative reward = ' + str(self.cumulative_reward)
+                print output_str
+                self.fw.write(output_str + '\n')
             self.agent_states[self.primary_agent]['deadline'] -= 1 # decrement the deadline of primary agent
     
     def sense(self, agent):
@@ -226,7 +234,11 @@ class Environment(object):
                 if state['deadline'] >= 0:
                     reward += 10  # BIG bonus
                 self.done = True
-                print "Environment.act(): Primary agent has reached destination!"  # [debug]
+                output_str = "Environment.act(): Primary agent has reached destination!\n"  # [debug]
+                self.cumulative_reward += reward
+                output_str += 'Cumulative reward = ' + str(self.cumulative_reward)
+                print output_str
+                self.fw.write(output_str + '\n')
             self.status_text = "state: {}\naction: {}\nreward: {}".format(agent.get_state(), action, reward)
             #print "Environment.act() [POST]: location: {}, heading: {}, action: {}, reward: {}".format(location, heading, action, reward)  # [debug]
         return reward
