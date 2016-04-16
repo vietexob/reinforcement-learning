@@ -225,7 +225,7 @@ class Environment(object):
                 ## Penalize if action violates traffic rules
                 reward = -1
         else:
-            ## Reward for doing nothing
+            ## Reward for doing nothing -- this gives a high tendency to do nothing!
             reward = 1
         
         ## Check if destination has been reached (in time)

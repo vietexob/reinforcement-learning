@@ -1,200 +1,202 @@
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 19.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 36.0
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 33.0
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 17.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 37.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 24.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 57.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 36.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 20.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 36.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 20.0
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 24.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 25.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 24.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 29.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 22.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 20.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 48.5
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 19.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 18.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 44.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 29.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 39.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 48.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.0
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 29.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 19.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 30.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 33.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 33.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 49.0
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 14.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 32.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 20.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 31.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 22.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 34.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 39.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 43.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 51.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 43.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 19
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 35.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 20.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 39.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 18.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 27.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 35
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 20
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 44.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 32.0
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 17
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 43.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 29
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 19.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 31.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 28.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.0
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 32.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 32.0
 Environment.reset(): Primary agent could not reach destination within deadline!
 Cumulative reward = 40.0
 Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 24.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 27
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 40.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 27.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 40.5
-Environment.act(): Primary agent has reached destination!
-Cumulative reward = 23.0
-Environment.act(): Primary agent has reached destination!
 Cumulative reward = 25.0
 Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 32.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 25.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 20.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 18.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 19
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 32.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 41.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 32.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 29
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 30.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 21.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 43.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 30.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 43.0
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 33.5
+Cumulative reward = 22.5
 Environment.act(): Primary agent has reached destination!
-Cumulative reward = 29.0
+Cumulative reward = 43.5
 Environment.reset(): Primary agent could not reach destination within deadline!
 Cumulative reward = 22.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 24
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 23.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 18.5
-Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 49.5
 Environment.reset(): Primary agent could not reach destination within deadline!
 Cumulative reward = 26.0
 Environment.reset(): Primary agent could not reach destination within deadline!
-Cumulative reward = 38.0
+Cumulative reward = 49.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 26.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 36.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 46.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 29.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 26.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 30.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 18.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 31.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 29.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 29.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 23.5
 Environment.act(): Primary agent has reached destination!
-Cumulative reward = 41.5
+Cumulative reward = 24.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 18.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 28.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 41.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 21.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 21.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 29.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 39.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 20.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 29.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 23.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 37.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 20.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 30.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 50.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 16.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 40.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 35.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 62.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 25.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 22.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 66.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 19.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 23.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 40.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 27.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 21.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 16.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 18.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 28.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 30.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 26.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 30.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 26.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 30.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 50.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 28.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 37.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 37.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 16.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 42.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 58.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 37.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 33.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 33.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 25.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 62.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 31.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 47.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 42.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 34.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 20
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 36.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 19.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 16.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 36.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 42.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 43.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 46.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 54.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 51.5
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 56.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 29.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 32.0
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 25.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 50.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 32.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 23.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 23.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 18
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 33.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 29.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 30.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 52.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 49.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 22.5
 Environment.act(): Primary agent has reached destination!
 Cumulative reward = 26.5
 Environment.act(): Primary agent has reached destination!
-Cumulative reward = 22.5
+Cumulative reward = 43.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 26.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 33.5
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 27
+Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 32.0
+Environment.act(): Primary agent has reached destination!
+Cumulative reward = 29.5
