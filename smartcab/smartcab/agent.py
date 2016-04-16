@@ -1,3 +1,4 @@
+import sys
 import random
 from environment import Agent, Environment
 from planner import RoutePlanner
@@ -58,11 +59,21 @@ class LearningAgent(Agent):
         ## with probability (1 - epsilon) and a random action with probability epsilon.
         if self.state in self.q_function:
             action_function = self.q_function[self.state]
+            action_keys = action_function.keys()
+            if len(action_keys) != len(self.env.valid_actions):
+                print('State = ' + str(self.state))
+                sys.exit("Keys do not cover valid actions: " + str(action_keys))
+            
             ## TODO: Find the action that has the highest value
             
             rand_action = random.choice(self.env.valid_actions)
             action = rand_action
         else:
+            ## Initialize <state, action> pairs and select random action
+            action_function = {}
+            for action in self.env.valid_actions:
+                action_function[action] = self.init_value
+            self.q_function[self.state] = action_function
             action = random.choice(self.env.valid_actions)        
         
         ## Execute action, get reward and new state
