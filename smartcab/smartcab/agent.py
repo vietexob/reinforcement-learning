@@ -33,35 +33,57 @@ class LearningAgent(Agent):
         - Senses the intersection state (traffic light and presence of other vehicles)
         - Gets the current deadline value (time remaining)
         '''
-        # Gather inputs
-        self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
+        ## The destination trying to reach
+        destination = self.env.agent_states[self]['destination']
         
-        ## Observe the current state
+        ## Observe the current state variables
+        ## (1) Traffic variables
         inputs = self.env.sense(self)
         light = inputs['light']
         oncoming = inputs['oncoming']
 #         right = inputs['right']
         left = inputs['left']
+        ## (2) Direction variables
+        self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
+        deadline = self.env.get_deadline(self)
+        location = self.env.agent_states[self]['location']
+        distance = self.env.compute_dist(location, destination)
+        heading = self.env.agent_states[self]['heading']
+        
+        ## Update the current observed state
+        self.state = (light, oncoming, left,
+                      deadline, self.next_waypoint, distance, heading)
         
         ## TODO: Implement the epsilon-greedy action selection that selects best-valued action in this state
         ## with probability (1 - epsilon) and a random action with probability epsilon.
-        ## Details: http://artint.info/html/ArtInt_265.html
-        rand_action = random.choice(self.env.valid_actions)
-        action = rand_action
+        if self.state in self.q_function:
+            action_function = self.q_function[self.state]
+            ## TODO: Find the action that has the highest value
+            
+            rand_action = random.choice(self.env.valid_actions)
+            action = rand_action
+        else:
+            action = random.choice(self.env.valid_actions)        
         
-        # Execute action and get reward
+        ## Execute action, get reward and new state
         reward = self.env.act(self, action)
-        new_inputs = self.env.sense(self)
         
-        # Update state variables
+        ## Update the state variables after action
+        ## (1) Traffic variables 
+        new_inputs = self.env.sense(self)
+        light = new_inputs['light']
+        oncoming = new_inputs['oncoming']
+        left = new_inputs['left']
+        ## (2) Direction variables
+        self.next_waypoint = self.planner.next_waypoint()
+        deadline = self.env.get_deadline(self)
         location = self.env.agent_states[self]['location']
-        destination = self.env.agent_states[self]['destination']
         distance = self.env.compute_dist(location, destination)
         heading = self.env.agent_states[self]['heading']
-        deadline = self.env.get_deadline(self)
         
-        ## State is a tuple of state variables
-        self.state = (deadline, distance, heading, light, oncoming, left)
+        ## Update the new state, which is a tuple of state variables
+        self.state = (light, oncoming, left,
+                      deadline, self.next_waypoint, distance, heading)
         
         # TODO: Learn policy based on state, action, reward
         
@@ -70,6 +92,7 @@ class LearningAgent(Agent):
 def run():
     """Run the agent for a finite number of trials."""
     # Set up environment and agent
+    ## TODO: Delete n_dummies in final submission
     env = Environment(n_dummies=3)  # create environment and add (3) dummy agents
     ## Create agent primary agent
     agent = env.create_agent(LearningAgent)  # create a learning agent
