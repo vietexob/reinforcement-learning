@@ -143,8 +143,8 @@ class LearningAgent(Agent):
 #         if (current_state == self.state) and (action is not None):
 #             print (action, current_state, self.state)
 #             sys.exit()
-#         current_alpha = 1 / math.sqrt(t+1)
-        current_alpha = self.alpha
+        current_alpha = 1 / math.sqrt(t+1)
+#         current_alpha = self.alpha
         self.q_function[current_state][action] = (1 - current_alpha) * current_q + current_alpha * (reward + self.gamma * new_q)
 #         print 'Updated Q = ' + str(self.q_function[current_state][action])
 #         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
@@ -156,7 +156,7 @@ def run():
     ## Create a log file for the environment for each run
     log_filename = '../smartcab.log'
     fw = open(log_filename, 'w')
-    n_trials = 5
+    n_trials = 100
     progress = ProgressBar(maxval=n_trials).start()
     env = Environment(n_dummies=3, fw=fw, progress=progress)  # create environment and add (3) dummy agents
     
