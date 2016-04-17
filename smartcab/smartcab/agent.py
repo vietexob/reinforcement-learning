@@ -1,33 +1,40 @@
-import sys
 import csv
 import glob
-import math
+# import math
 import time
 import random
 import calendar
 import pandas as pd
+
 from ast import literal_eval
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
 from progressbar import ProgressBar
+from argparse import ArgumentParser, RawDescriptionHelpFormatter, ArgumentDefaultsHelpFormatter
+from textwrap import dedent
 
 class LearningAgent(Agent):
     """An agent that learns how to drive in the smartcab world."""
     
-    def __init__(self, env, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.10):
+    def __init__(self, env, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.10,
+                 discount_deadline=False, history=0):
         super(LearningAgent, self).__init__(env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
         self.color = 'red'  # override default color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         
         ## Initialize the Q-function as a dictionary (state) of dictionaries (actions)
         self.q_function = {}
-        self.init_q_function()
+        self.history = history
+        if self.history > 0:
+            self.init_q_function()
         
         ## Initial value of any (state, action) tuple is an arbitrary random number
         self.init_value = init_value
         ## Discount factor gamma: 0 (myopic) vs 1 (long-term optimal)
         self.gamma = gamma
+        self.discount_deadline = discount_deadline
+        
         ## Learning rate alpha: 0 (no learning) vs 1 (consider only most recent information)
         ## NOTE: Normally, alpha decreases over time: for example, alpha = 1 / t
         self.alpha = alpha
@@ -43,11 +50,19 @@ class LearningAgent(Agent):
     def get_q_function(self):
         return self.q_function
     
+    def set_params(self, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.10,
+                   discount_deadline=False, history=0):
+        self.init_value = init_value
+        self.gamma = gamma
+        self.alpha = alpha
+        self.epsilon = epsilon
+        self.discount_deadline = discount_deadline
+        self.history = history
+        
     def reset(self, destination=None):
         self.planner.route_to(destination)
         self.env.set_trial_number(self.trial)
         self.trial += 1
-        
         ## Decay the epsilon parameter
 #         self.epsilon = self.epsilon / math.sqrt(self.trial)
         # TODO: Prepare for a new trip; reset any variables here, if required
@@ -58,6 +73,7 @@ class LearningAgent(Agent):
         Initializes the Q-tables with previously learned results.
         '''
         csv_files = glob.glob('../q_tables/*.csv')
+        history_counter = 0
         state_counter = {}
         for csv_file in csv_files:
             q_df = pd.read_csv(csv_file, sep=',', header=None)
@@ -83,6 +99,9 @@ class LearningAgent(Agent):
                         action_function[action] = q_df.ix[i][str(action)]
                     self.q_function[state_tuple] = action_function
                     state_counter[state_tuple] = 1
+            history_counter += 1
+            if history_counter >= self.history:
+                break
         
         ## Average all action values
         for state in state_counter.keys():
@@ -136,14 +155,9 @@ class LearningAgent(Agent):
         inputs = self.env.sense(self)
         light = inputs['light']
         oncoming = inputs['oncoming']
-#         right = inputs['right']
         left = inputs['left']
         ## (2) Direction variables
         self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
-#         deadline = self.env.get_deadline(self)
-#         location = self.env.agent_states[self]['location']
-#         distance = self.env.compute_dist(location, destination)
-#         heading = self.env.agent_states[self]['heading']
         
         ## Update the current observed state
         self.state = (light, oncoming, left, self.next_waypoint)
@@ -168,13 +182,11 @@ class LearningAgent(Agent):
         left = new_inputs['left']
         ## (2) Direction variables
         self.next_waypoint = self.planner.next_waypoint()
-        deadline = self.env.get_deadline(self)
-        if t == 1:
-            self.gamma = 1 - float(4)/deadline
-#             print self.gamma
-#         location = self.env.agent_states[self]['location']
-#         distance = self.env.compute_dist(location, destination)
-#         heading = self.env.agent_states[self]['heading']
+        
+        if self.discount_deadline:
+            deadline = self.env.get_deadline(self)
+            if t == 1:
+                self.gamma = 1 - float(4)/deadline
         
         ## Update the new state, which is a tuple of state variables
         self.state = (light, oncoming, left, self.next_waypoint)
@@ -184,32 +196,47 @@ class LearningAgent(Agent):
         new_q = self.q_function[self.state][new_action]
         
         ## Update the Q-function
-#         if (current_state == self.state) and (action is not None):
-#             print (action, current_state, self.state)
-#             sys.exit()
 #         current_alpha = 1 / math.sqrt(t+1)
         current_alpha = self.alpha
         self.q_function[current_state][action] = (1 - current_alpha) * current_q + current_alpha * (reward + self.gamma * new_q)
 #         print 'Updated Q = ' + str(self.q_function[current_state][action])
 #         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
-def run():
-    """Run the agent for a finite number of trials."""
+def run(params={}):
+    """
+    Run the agent for a finite number of trials.
+    """
+    ## Collect the runtime params
+    n_trials = params['trials']
+    update_delay = params['delay']
+    log_filename = params['log'] 
+    n_dummies = params['dummies']
+    ## Learning parameters
+    alpha = params['alpha']
+    gamma = params['gamma']
+    epsilon = params['epsilon']
+    initial = params['initial']
+    ## Discount factor gamma depends on deadline?
+    discount_deadline = params['deadline']
+    ## How many previous Q-tables to remember?
+    history = params['history']
+    
     # Set up environment and agent
-    ## TODO: Delete n_dummies, fw and progress in final submission
+    ## TODO: Delete n_dummies, fw and progress in the final submission
     ## Create a log file for the environment for each run
-    log_filename = '../smartcab.log'
     fw = open(log_filename, 'w')
-    n_trials = 100
     progress = ProgressBar(maxval=n_trials).start()
-    env = Environment(n_dummies=3, fw=fw, progress=progress)  # create environment and add (3) dummy agents
+    env = Environment(n_dummies=n_dummies, fw=fw, progress=progress)  # create environment and add (3) dummy agents
     
     ## Create agent primary agent
     agent = env.create_agent(LearningAgent)  # create a learning agent
     env.set_primary_agent(agent, enforce_deadline=True)  # set agent to track
+    agent.set_params(initial, gamma, alpha, epsilon, discount_deadline, history)
+    if history > 0:
+        agent.init_q_function()
     
     # Now simulate it
-    sim = Simulator(env, update_delay=0.01)  # reduce update_delay to speed up simulation
+    sim = Simulator(env, update_delay=update_delay)  # reduce update_delay to speed up simulation
     start_time = time.time()
     sim.run(n_trials=n_trials)  # press Esc or close pygame window to quit
     progress.finish()
@@ -223,10 +250,6 @@ def run():
     
     ## Compute the success trials
     success_trials = env.get_success_trials()
-#     cumulative_rewards = env.get_cumulative_rewards()
-#     for i in range(len(success_trials)):
-#         print ((i+1), success_trials[i], cumulative_rewards[i])
-    
     counter = 0
     success_count = 0
     for is_success in reversed(success_trials):
@@ -254,5 +277,47 @@ def run():
     else:
         print 'Failure :('
     
+def parse():
+    '''
+    Parse command/terminal line
+        :returns: A dictionary containing the parsed configuration setting
+        :rtype: dict
+    '''
+    class CustomFormatter(ArgumentDefaultsHelpFormatter, RawDescriptionHelpFormatter):
+        pass
+    parser = ArgumentParser(formatter_class=CustomFormatter,
+                            description=dedent('''\
+                                description:
+                                   Run the Smartcab application to demonstrate Q-learning
+
+                                authors:
+                                   Truc Viet 'Joe' Le
+                                   Email: vietexob@gmail.com
+
+                                license:
+                                   Creative Commons
+
+                                software version:
+                                   1.0
+                            '''),
+                            epilog=dedent('''\
+                                example of usage:
+                                   python agent.py -n 10
+                            '''))
+    
+    parser.add_argument('-n', '--trials', type=int, default=100, help='Number of trials')
+    parser.add_argument('-d', '--delay', type=float, default=0.50, help='Update delay to control simulation speed')
+    parser.add_argument('-l', '--log', type=str, default='../smartcab.log', help='Log output file')
+    parser.add_argument('-m', '--dummies', type=int, default=3, help='Number dummy agents')
+    parser.add_argument('-a', '--alpha', type=float, default=0.20, help='Learning rate')
+    parser.add_argument('-g', '--gamma', type=float, default=0.90, help='Discount factor')
+    parser.add_argument('-e', '--epsilon', type=float, default=0.10, help='Probability of random action')
+    parser.add_argument('-i', '--initial', type=float, default=0.0, help='Initial value of any <state, action> pair')
+    parser.add_argument('-t', '--deadline', action='store_true', default=True, help='Whether to have discount factor gamma dependent on deadline')
+    parser.add_argument('-w', '--history', type=int, default=0, help='Max number of stored Q-tables to remember and initialize')
+    
+    return vars(parser.parse_args())
+
 if __name__ == '__main__':
-    run()
+    params = parse()
+    run(params)

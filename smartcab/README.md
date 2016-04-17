@@ -1,23 +1,23 @@
 # Train a Smartcab How to Drive
 
-Reinforcement Learning Project
+## Synopsis
+Smartcab is a self-driving car from the not-so-distant future that ferries people from one arbitrary location to another. This application demonstrates how to use model-free **reinforcement learning** (i.e., Q-learning) to train smartcabs to desired self-driving behaviors through trials and errors.
 
 ## Install
 
-This project requires Python 2.7 with the pygame library installed:
-
-https://www.pygame.org/wiki/GettingStarted
-
-## Code
-
-Open `smartcab/agent.py` and implement `LearningAgent`. Follow `TODO`s for further instructions.
+This project requires Python 2.7x with the [Pygame](https://www.pygame.org/wiki/GettingStarted) library installed. 
 
 ## Run
 
-Make sure you are in the top-level project directory `smartcab/` (that contains this README). Then run:
+Make sure you are in the lowest-level project directory `smartcab/smartcab` (that contains `agent.py`). Then run:
 
-```python smartcab/agent.py```
+```python agent.py```
 
-OR:
+## Parameters
 
-```python -m smartcab.agent```
+
+## Parameter Tuning
+
+
+## Directories
+

@@ -296,7 +296,9 @@ class Agent(object):
 
     def get_next_waypoint(self):
         return self.next_waypoint
-
+    
+    def set_params(self):
+        pass
 
 class DummyAgent(Agent):
     color_choices = ['blue', 'cyan', 'magenta', 'orange']
