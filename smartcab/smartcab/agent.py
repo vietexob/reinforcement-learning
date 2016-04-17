@@ -1,10 +1,11 @@
 import sys
 import csv
+import glob
 import math
 import time
 import random
 import calendar
-
+import pandas as pd
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
@@ -48,6 +49,15 @@ class LearningAgent(Agent):
         self.epsilon = self.epsilon / math.sqrt(self.trial)
         # TODO: Prepare for a new trip; reset any variables here, if required
         self.cumulative_reward = 0
+    
+    def init_q_function(self):
+        '''
+        Initializes the Q-tables with previously learned results.
+        '''
+        csv_files = glob.glob('../q_tables/*.csv')
+        for csv_file in csv_files:
+            
+        return None
     
     def select_action(self, state=None, is_current=True, t=1):
         '''
