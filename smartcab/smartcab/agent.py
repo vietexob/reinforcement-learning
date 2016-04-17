@@ -4,6 +4,7 @@ import random
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
+from progressbar import ProgressBar
 
 class LearningAgent(Agent):
     """An agent that learns how to drive in the smartcab world."""
@@ -33,8 +34,9 @@ class LearningAgent(Agent):
         
     def reset(self, destination=None):
         self.planner.route_to(destination)
-        print len(self.q_function.keys())
+        self.env.set_trial_number(self.trial)
         self.trial += 1
+        
         ## Decay the epsilon parameter
 #         self.epsilon = self.epsilon / math.sqrt(self.trial)
         # TODO: Prepare for a new trip; reset any variables here, if required
@@ -105,7 +107,7 @@ class LearningAgent(Agent):
         
         ## Retrieve the current Q-value
         current_q = self.q_function[self.state][action]
-        print 'Current Q = ' + str(current_q)
+#         print 'Current Q = ' + str(current_q)
         
         ## Update the state variables after action
         ## (1) Traffic variables 
@@ -133,18 +135,19 @@ class LearningAgent(Agent):
 #             sys.exit()
         current_alpha = self.alpha
         self.q_function[current_state][action] = (1 - current_alpha) * current_q + current_alpha * (reward + self.gamma * new_q)
-        print 'Updated Q = ' + str(self.q_function[current_state][action])
-        
-        print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
+#         print 'Updated Q = ' + str(self.q_function[current_state][action])
+#         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
 def run():
     """Run the agent for a finite number of trials."""
     # Set up environment and agent
-    ## TODO: Delete n_dummies in final submission
+    ## TODO: Delete n_dummies, fw and progress in final submission
     ## Create a log file for the environment for each run
     log_filename = '../smartcab.log'
     fw = open(log_filename, 'w')
-    env = Environment(n_dummies=3, fw=fw)  # create environment and add (3) dummy agents
+    n_trials = 100
+    progress = ProgressBar(maxval=n_trials).start()
+    env = Environment(n_dummies=3, fw=fw, progress=progress)  # create environment and add (3) dummy agents
     
     ## Create agent primary agent
     agent = env.create_agent(LearningAgent)  # create a learning agent
@@ -152,8 +155,8 @@ def run():
     
     # Now simulate it
     sim = Simulator(env, update_delay=0.10)  # reduce update_delay to speed up simulation
-    ## Each trial is a distinct game?
-    sim.run(n_trials=100)  # press Esc or close pygame window to quit
+    sim.run(n_trials=n_trials)  # press Esc or close pygame window to quit
+    progress.finish()
     fw.close() # close the log writer
 
 if __name__ == '__main__':
