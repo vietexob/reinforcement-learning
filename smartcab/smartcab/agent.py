@@ -1,6 +1,10 @@
 import sys
+import csv
 import math
+import time
 import random
+import calendar
+
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
@@ -8,8 +12,8 @@ from progressbar import ProgressBar
 
 class LearningAgent(Agent):
     """An agent that learns how to drive in the smartcab world."""
-
-    def __init__(self, env, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.10):
+    
+    def __init__(self, env, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.50):
         super(LearningAgent, self).__init__(env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
         self.color = 'red'  # override default color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
@@ -32,13 +36,16 @@ class LearningAgent(Agent):
         ## The cumulative reward
         self.cumulative_reward = 0
         
+    def get_q_function(self):
+        return self.q_function
+    
     def reset(self, destination=None):
         self.planner.route_to(destination)
         self.env.set_trial_number(self.trial)
         self.trial += 1
         
         ## Decay the epsilon parameter
-#         self.epsilon = self.epsilon / math.sqrt(self.trial)
+        self.epsilon = self.epsilon / math.sqrt(self.trial)
         # TODO: Prepare for a new trip; reset any variables here, if required
         self.cumulative_reward = 0
     
@@ -119,7 +126,7 @@ class LearningAgent(Agent):
         self.next_waypoint = self.planner.next_waypoint()
         deadline = self.env.get_deadline(self)
         if t == 1:
-            self.gamma = 1 - float(3)/deadline
+            self.gamma = 1 - float(4)/deadline
 #             print self.gamma
 #         location = self.env.agent_states[self]['location']
 #         distance = self.env.compute_dist(location, destination)
@@ -136,6 +143,7 @@ class LearningAgent(Agent):
 #         if (current_state == self.state) and (action is not None):
 #             print (action, current_state, self.state)
 #             sys.exit()
+#         current_alpha = 1 / math.sqrt(t+1)
         current_alpha = self.alpha
         self.q_function[current_state][action] = (1 - current_alpha) * current_q + current_alpha * (reward + self.gamma * new_q)
 #         print 'Updated Q = ' + str(self.q_function[current_state][action])
@@ -157,10 +165,48 @@ def run():
     env.set_primary_agent(agent, enforce_deadline=True)  # set agent to track
     
     # Now simulate it
-    sim = Simulator(env, update_delay=0.05)  # reduce update_delay to speed up simulation
+    sim = Simulator(env, update_delay=0.01)  # reduce update_delay to speed up simulation
+    start_time = time.time()
     sim.run(n_trials=n_trials)  # press Esc or close pygame window to quit
     progress.finish()
+    runtime = round((time.time()-start_time) / 60, 2)
+    runtime_str = 'Runtime = ' + str(runtime) + ' minutes\n'
+    fw.write(runtime_str)
     fw.close() # close the log writer
-
+    
+    ## Show the runtime
+    print '--- %s minutes ---' % runtime
+    
+    ## Compute the success trials
+    success_trials = env.get_success_trials()
+#     cumulative_rewards = env.get_cumulative_rewards()
+#     for i in range(len(success_trials)):
+#         print ((i+1), success_trials[i], cumulative_rewards[i])
+    
+    counter = 0
+    success_count = 0
+    for is_success in reversed(success_trials):
+        if is_success:
+            success_count += 1
+        counter += 1
+        if counter == 10:
+            break
+    if success_count >= 7:
+        print 'Success!'
+        ## Save the Q-table for later use
+        datetime_int = int(calendar.timegm(time.gmtime()))
+        out_filename = '../q_tables/q_table_' + str(datetime_int) + '.csv'
+        f = open(out_filename, 'wb')
+        writer = csv.writer(f)
+        q_function = agent.get_q_function()
+        for state, action_function in q_function.items():
+            action, values = action_function.items()
+            writer.writerow([state, values])
+        print action
+        f.close()
+        print 'Written to file: ' + out_filename
+    else:
+        print 'Failure :('
+        
 if __name__ == '__main__':
     run()

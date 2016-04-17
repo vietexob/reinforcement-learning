@@ -44,6 +44,8 @@ class Environment(object):
         self.cumulative_reward = 0
         self.trial = 0 # the trial number
         self.progress = progress # the progress bar
+        self.success_trials = [] # list to record outcomes of trials
+        self.cumulative_rewards = []
         
         # Road network
         self.grid_size = (8, 6)  # (cols, rows)
@@ -80,6 +82,12 @@ class Environment(object):
     def set_trial_number(self, trial=0):
         self.trial = trial
         self.progress.update(trial-1)
+    
+    def get_success_trials(self):
+        return self.success_trials
+    
+    def get_cumulative_rewards(self):
+        return self.cumulative_rewards
     
     def create_agent(self, agent_class, *args, **kwargs):
         agent = agent_class(self, *args, **kwargs)
@@ -140,6 +148,9 @@ class Environment(object):
                 output_str += 'Cumulative reward = ' + str(self.cumulative_reward)
 #                 print output_str
                 self.fw.write(output_str + '\n')
+                ## Record the failure trial
+                self.success_trials.append(False)
+                self.cumulative_rewards.append(self.cumulative_reward)
             self.agent_states[self.primary_agent]['deadline'] -= 1 # decrement the deadline of primary agent
     
     def sense(self, agent):
@@ -239,14 +250,26 @@ class Environment(object):
             if state['location'] == state['destination']:
                 if state['deadline'] >= 0:
                     reward += 10  # BIG bonus
-                self.done = True
-                output_str = str(self.trial) + ". Environment.act(): Primary agent has reached destination!\n"  # [debug]
+                    output_str = str(self.trial) + ". Environment.act(): Primary agent has reached destination!\n"  # [debug]
+                    ## Record the success trial
+                    self.success_trials.append(True)
+                else:
+                    output_str = str(self.trial) + ". Environment.act(): Primary agent has reached destination exceeding deadline!\n"  # [debug]
+                    ## Record the failure trial
+                    self.success_trials.append(False)
+                
                 self.cumulative_reward += reward
                 output_str += 'Cumulative reward = ' + str(self.cumulative_reward)
 #                 print output_str
                 self.fw.write(output_str + '\n')
+                self.cumulative_rewards.append(self.cumulative_reward)
+                self.done = True
+            else:
+                self.cumulative_reward += reward
+            
             self.status_text = "state: {}\naction: {}\nreward: {}".format(agent.get_state(), action, reward)
             #print "Environment.act() [POST]: location: {}, heading: {}, action: {}, reward: {}".format(location, heading, action, reward)  # [debug]
+            
         return reward
     
     def compute_dist(self, a, b):
