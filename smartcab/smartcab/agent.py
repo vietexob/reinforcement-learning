@@ -6,6 +6,7 @@ import time
 import random
 import calendar
 import pandas as pd
+from ast import literal_eval
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
@@ -14,13 +15,15 @@ from progressbar import ProgressBar
 class LearningAgent(Agent):
     """An agent that learns how to drive in the smartcab world."""
     
-    def __init__(self, env, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.50):
+    def __init__(self, env, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.10):
         super(LearningAgent, self).__init__(env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
         self.color = 'red'  # override default color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         
         ## Initialize the Q-function as a dictionary (state) of dictionaries (actions)
         self.q_function = {}
+        self.init_q_function()
+        
         ## Initial value of any (state, action) tuple is an arbitrary random number
         self.init_value = init_value
         ## Discount factor gamma: 0 (myopic) vs 1 (long-term optimal)
@@ -46,7 +49,7 @@ class LearningAgent(Agent):
         self.trial += 1
         
         ## Decay the epsilon parameter
-        self.epsilon = self.epsilon / math.sqrt(self.trial)
+#         self.epsilon = self.epsilon / math.sqrt(self.trial)
         # TODO: Prepare for a new trip; reset any variables here, if required
         self.cumulative_reward = 0
     
@@ -55,9 +58,40 @@ class LearningAgent(Agent):
         Initializes the Q-tables with previously learned results.
         '''
         csv_files = glob.glob('../q_tables/*.csv')
+        state_counter = {}
         for csv_file in csv_files:
-            
-        return None
+            q_df = pd.read_csv(csv_file, sep=',', header=None)
+            ## Assign the header
+            header = ['state'] + [str(action) for action in self.env.valid_actions]
+            q_df.columns = header
+            for i in xrange(q_df.shape[0]):
+                state = q_df.ix[i]['state']
+                state = state[1:-1]
+                state_tuple = literal_eval(state)
+                if state_tuple in self.q_function:
+                    action_function = self.q_function[state_tuple]
+                    for action in self.env.valid_actions:
+                        current_value = action_function[action]
+                        action_function[action] = current_value + q_df.ix[i][str(action)]
+                    self.q_function[state_tuple] = action_function
+                    ## Update the frequency counter
+                    counter = state_counter[state_tuple]
+                    state_counter[state_tuple] = counter + 1
+                else:
+                    action_function = {}
+                    for action in self.env.valid_actions:
+                        action_function[action] = q_df.ix[i][str(action)]
+                    self.q_function[state_tuple] = action_function
+                    state_counter[state_tuple] = 1
+        
+        ## Average all action values
+        for state in state_counter.keys():
+            count = state_counter[state]
+            action_function = self.q_function[state]
+            for action in self.env.valid_actions:
+                current_value = action_function[action]
+                action_function[action] = current_value / count
+            self.q_function[state] = action_function
     
     def select_action(self, state=None, is_current=True, t=1):
         '''
@@ -153,8 +187,8 @@ class LearningAgent(Agent):
 #         if (current_state == self.state) and (action is not None):
 #             print (action, current_state, self.state)
 #             sys.exit()
-        current_alpha = 1 / math.sqrt(t+1)
-#         current_alpha = self.alpha
+#         current_alpha = 1 / math.sqrt(t+1)
+        current_alpha = self.alpha
         self.q_function[current_state][action] = (1 - current_alpha) * current_q + current_alpha * (reward + self.gamma * new_q)
 #         print 'Updated Q = ' + str(self.q_function[current_state][action])
 #         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
