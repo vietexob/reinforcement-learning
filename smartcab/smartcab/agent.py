@@ -9,7 +9,7 @@ from progressbar import ProgressBar
 class LearningAgent(Agent):
     """An agent that learns how to drive in the smartcab world."""
 
-    def __init__(self, env, init_value=0, gamma=0.80, alpha=0.20, epsilon=0.10):
+    def __init__(self, env, init_value=0, gamma=0.90, alpha=0.20, epsilon=0.10):
         super(LearningAgent, self).__init__(env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
         self.color = 'red'  # override default color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
@@ -118,6 +118,9 @@ class LearningAgent(Agent):
         ## (2) Direction variables
         self.next_waypoint = self.planner.next_waypoint()
         deadline = self.env.get_deadline(self)
+        if t == 1:
+            self.gamma = 1 - float(3)/deadline
+#             print self.gamma
 #         location = self.env.agent_states[self]['location']
 #         distance = self.env.compute_dist(location, destination)
 #         heading = self.env.agent_states[self]['heading']
@@ -154,7 +157,7 @@ def run():
     env.set_primary_agent(agent, enforce_deadline=True)  # set agent to track
     
     # Now simulate it
-    sim = Simulator(env, update_delay=0.10)  # reduce update_delay to speed up simulation
+    sim = Simulator(env, update_delay=0.05)  # reduce update_delay to speed up simulation
     sim.run(n_trials=n_trials)  # press Esc or close pygame window to quit
     progress.finish()
     fw.close() # close the log writer
