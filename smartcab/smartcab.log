@@ -1,1 +1,11 @@
-Runtime = 0.01 minutes
+1. Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 27.5
+2. Environment.act(): Primary agent has reached destination!
+Cumulative reward = 27.5
+3. Environment.act(): Primary agent has reached destination!
+Cumulative reward = 41.0
+4. Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 50.5
+5. Environment.reset(): Primary agent could not reach destination within deadline!
+Cumulative reward = 36.5
+Runtime = 0.11 minutes

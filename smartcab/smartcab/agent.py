@@ -156,7 +156,7 @@ def run():
     ## Create a log file for the environment for each run
     log_filename = '../smartcab.log'
     fw = open(log_filename, 'w')
-    n_trials = 100
+    n_trials = 5
     progress = ProgressBar(maxval=n_trials).start()
     env = Environment(n_dummies=3, fw=fw, progress=progress)  # create environment and add (3) dummy agents
     
@@ -200,13 +200,15 @@ def run():
         writer = csv.writer(f)
         q_function = agent.get_q_function()
         for state, action_function in q_function.items():
-            action, values = action_function.items()
-            writer.writerow([state, values])
-        print action
+            q_row = []
+            q_row.append(state)
+            for action in env.valid_actions:
+                q_row.append(action_function[action])
+            writer.writerow(q_row)
         f.close()
         print 'Written to file: ' + out_filename
     else:
         print 'Failure :('
-        
+    
 if __name__ == '__main__':
     run()
