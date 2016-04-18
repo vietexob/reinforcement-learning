@@ -19,9 +19,11 @@ Make sure you are in the lowest-level project directory `smartcab/smartcab` (tha
 
 
 ## Demos
+
 In these demonstrations, the following params are fixed: `trials=1`, `delay=0.50`, `alpha=0.20`, `gamma=1-4/deadline`, `epsilon=0.10`, `initial=0`, and `deadline=True`. The following scenarios are demonstrated:
-- Learning with no history: `history=0`
-- Second
+- Learning with no history: `history=0`, `delay=1.0`
+- Learning through trial and error: `trials=10`
+- Learning with history: `history=50`
 
 ## Parameter Tuning
 

@@ -1,7 +1,9 @@
 import random
 
 class RoutePlanner(object):
-    """Silly route planner that is meant for a perpendicular grid network."""
+    """
+    Silly route planner that is meant for a perpendicular grid network.
+    """
     
     def __init__(self, env, agent):
         self.env = env

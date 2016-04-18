@@ -4,7 +4,9 @@ import random
 import pygame
 
 class Simulator(object):
-    """PyGame-based simulator to create a dynamic environment."""
+    """
+    PyGame-based simulator to create a dynamic environment.
+    """
     
     colors = {
         'black'   : (  0,   0,   0),
