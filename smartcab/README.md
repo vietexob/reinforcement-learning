@@ -1,7 +1,7 @@
 # Train a Smartcab How to Drive
 
 ## Synopsis
-Smartcab is a self-driving car from the not-so-distant future that ferries people from one arbitrary location to another. This application demonstrates how to use model-free **reinforcement learning** (i.e., Q-learning) to train smartcabs to desired self-driving behaviors through trials and errors.
+Smartcab is a self-driving car from the not-so-distant future that ferries people from one arbitrary location to another. This application demonstrates how to use model-free **reinforcement learning** (i.e., Q-learning) to train smartcabs to desired self-driving behaviors through trial and error.
 
 Refer to [these slides](https://docs.google.com/presentation/d/1fJPmHzDFc9SYykhgZIRH-ZovdRat6cHJOBNG4CzTA60/edit?usp=sharing) for more info.
 

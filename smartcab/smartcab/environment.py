@@ -4,7 +4,9 @@ from collections import OrderedDict
 from simulator import Simulator
 
 class TrafficLight(object):
-    """A traffic light that switches periodically."""
+    """
+    A traffic light that switches state periodically.
+    """
     
     valid_states = [True, False]  # True = NS open, False = EW open
     
@@ -26,7 +28,9 @@ class TrafficLight(object):
             self.last_updated = t
 
 class Environment(object):
-    """An environment within which all agents interact with."""
+    """
+    An environment in which all agents interact with.
+    """
     
     valid_actions = [None, 'forward', 'left', 'right']
     valid_inputs = {'light': TrafficLight.valid_states,
@@ -40,6 +44,7 @@ class Environment(object):
         self.t = 0
         self.agent_states = OrderedDict()
         self.status_text = ""
+        ## Added variables
         self.fw = fw # the log file writer
         self.cumulative_reward = 0
         self.trial = 0 # the trial number
@@ -239,7 +244,6 @@ class Environment(object):
                 ## Reward if action matches next waypoint
                 reward = 2 if action == agent.get_next_waypoint() else 0.5
             else:
-                ## TODO: Why is the move not executed (state unchanged)? Does the env bans illegal move?
                 ## Penalize if action violates traffic rules
                 reward = -1
         else:
