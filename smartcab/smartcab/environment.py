@@ -81,7 +81,8 @@ class Environment(object):
     
     def set_trial_number(self, trial=0):
         self.trial = trial
-        self.progress.update(trial-1)
+        if self.progress is not None:
+            self.progress.update(trial-1)
     
     def get_success_trials(self):
         return self.success_trials
@@ -119,7 +120,7 @@ class Environment(object):
         ## Set random start heading (N, S, E, W)
         start_heading = random.choice(self.valid_headings)
         deadline = self.compute_dist(start, destination) * 5
-#         print "Environment.reset(): Trial set up with start = {}, destination = {}, deadline = {}".format(start, destination, deadline)
+        print "Environment.reset(): Trial set up with start = {}, destination = {}, deadline = {}".format(start, destination, deadline)
         
         # Initialize the dummy and primary agents
         for agent in self.agent_states.iterkeys():
@@ -146,7 +147,7 @@ class Environment(object):
                 self.done = True
                 output_str = str(self.trial) + ". Environment.reset(): Primary agent could not reach destination within deadline!\n"
                 output_str += 'Cumulative reward = ' + str(self.cumulative_reward)
-#                 print output_str
+                print output_str
                 self.fw.write(output_str + '\n')
                 ## Record the failure trial
                 self.success_trials.append(False)
@@ -260,7 +261,7 @@ class Environment(object):
                 
                 self.cumulative_reward += reward
                 output_str += 'Cumulative reward = ' + str(self.cumulative_reward)
-#                 print output_str
+                print output_str
                 self.fw.write(output_str + '\n')
                 self.cumulative_rewards.append(self.cumulative_reward)
                 self.done = True

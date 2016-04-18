@@ -10,7 +10,7 @@ from ast import literal_eval
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
-from progressbar import ProgressBar
+# from progressbar import ProgressBar
 from argparse import ArgumentParser, RawDescriptionHelpFormatter, ArgumentDefaultsHelpFormatter
 from textwrap import dedent
 
@@ -186,6 +186,7 @@ class LearningAgent(Agent):
         if self.discount_deadline:
             deadline = self.env.get_deadline(self)
             if t == 1:
+                ## TODO: Set this as an input param
                 self.gamma = 1 - float(4)/deadline
         
         ## Update the new state, which is a tuple of state variables
@@ -200,7 +201,7 @@ class LearningAgent(Agent):
         current_alpha = self.alpha
         self.q_function[current_state][action] = (1 - current_alpha) * current_q + current_alpha * (reward + self.gamma * new_q)
 #         print 'Updated Q = ' + str(self.q_function[current_state][action])
-#         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
+        print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
 def run(params={}):
     """
@@ -225,8 +226,8 @@ def run(params={}):
     ## TODO: Delete n_dummies, fw and progress in the final submission
     ## Create a log file for the environment for each run
     fw = open(log_filename, 'w')
-    progress = ProgressBar(maxval=n_trials).start()
-    env = Environment(n_dummies=n_dummies, fw=fw, progress=progress)  # create environment and add (3) dummy agents
+#     progress = ProgressBar(maxval=n_trials).start()
+    env = Environment(n_dummies=n_dummies, fw=fw, progress=None)  # create environment and add (3) dummy agents
     
     ## Create agent primary agent
     agent = env.create_agent(LearningAgent)  # create a learning agent
@@ -239,7 +240,7 @@ def run(params={}):
     sim = Simulator(env, update_delay=update_delay)  # reduce update_delay to speed up simulation
     start_time = time.time()
     sim.run(n_trials=n_trials)  # press Esc or close pygame window to quit
-    progress.finish()
+#     progress.finish()
     runtime = round((time.time()-start_time) / 60, 2)
     runtime_str = 'Runtime = ' + str(runtime) + ' minutes\n'
     fw.write(runtime_str)
@@ -259,7 +260,7 @@ def run(params={}):
         if counter == 10:
             break
     if success_count >= 7:
-        print 'Success!'
+#         print 'Success!'
         ## Save the Q-table for later use
         datetime_int = int(calendar.timegm(time.gmtime()))
         out_filename = '../q_tables/q_table_' + str(datetime_int) + '.csv'
@@ -275,7 +276,8 @@ def run(params={}):
         f.close()
         print 'Written to file: ' + out_filename
     else:
-        print 'Failure :('
+        pass
+#         print 'Failure :('
     
 def parse():
     '''
