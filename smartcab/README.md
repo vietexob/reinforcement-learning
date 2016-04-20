@@ -3,27 +3,38 @@
 ## Synopsis
 Smartcab is a self-driving car from the not-so-distant future that ferries people from one arbitrary location to another. This application demonstrates how to use model-free **reinforcement learning** (i.e., Q-learning) to train smartcabs to desired self-driving behaviors through trial and error.
 
-Refer to [these slides](https://docs.google.com/presentation/d/1fJPmHzDFc9SYykhgZIRH-ZovdRat6cHJOBNG4CzTA60/edit?usp=sharing) for more info.
-
-Video of my talk at [PUGS](http://pugs.org.sg/) meetup on April 18, 2016: [https://engineers.sg/video/reinforcement-learning-using-python-python-sg--678](https://engineers.sg/video/reinforcement-learning-using-python-python-sg--678).
+* Refer to [these slides](https://docs.google.com/presentation/d/1fJPmHzDFc9SYykhgZIRH-ZovdRat6cHJOBNG4CzTA60/edit?usp=sharing) for more info.
+* Video of my talk at [PUGS](http://pugs.org.sg/) meetup on April 18, 2016: [https://engineers.sg/video/reinforcement-learning-using-python-python-sg--678](https://engineers.sg/video/reinforcement-learning-using-python-python-sg--678).
 
 ## Install
 
 This project requires Python 2.7x with the [Pygame](https://www.pygame.org/wiki/GettingStarted) library installed.
 
 Notes on installation of Pygame:
-- If using `home-brew`: Remember to update `home-brew` to the latest version before installing or things could go haywire.
-- Important to install all dependencies beforehand!
-- Using `conda`: `conda install -c https://conda.anaconda.org/quasiben pygame`
+- If using `home-brew`, make sure to update it to the latest version before installing or things could go haywire.
+- It is important to install all dependencies beforehand!
+- If using [anaconda](https://www.continuum.io/downloads): `conda install -c https://conda.anaconda.org/quasiben pygame`; or search the conda repo: `anaconda search -t conda pygame`.
+- [This tutorial](http://kidscancode.org/blog/2015/09/pygame_install/) is very helpful.
+
+[Pandas](http://pandas.pydata.org/) library is also required -- make you have it properly installed.
 
 ## Run
 
-Make sure you are in the lowest-level project directory `smartcab/smartcab` (that contains `agent.py`). Then run:
+Make sure you are in the **lowest-level** project directory `smartcab/smartcab` (that contains `agent.py`). Then run:
 
 ```python agent.py```
 
-## Parameters
-
+There are **options** to be passed as follows:
+* `--trials`: number of trials to be run (each trial is a new "game" with new deadline and destination); however, Q-tables are "accumulated" and averaged over the trials so that later trials are expected to perform better than initial ones. Default `trials=100`.
+* `--delay`: to control the simulation speed, lower delay, higher speed. Default `delay=0.50`.
+* `--log`:
+* `--dummies`:
+* `--alpha`:
+* `--gamma`:
+* `--epsilon`: 
+* `--initial`:
+* `--deadline`:
+* `--history`:
 
 ## Demos
 
