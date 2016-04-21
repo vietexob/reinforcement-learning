@@ -207,23 +207,33 @@ def run(params={}):
     """
     Run the agent for a finite number of trials.
     """
-    ## Collect the runtime params
-    n_trials = params['trials']
-    update_delay = params['delay']
-    log_filename = params['log'] 
-    n_dummies = params['dummies']
+    ## Collect the runtime options
+    n_trials = int(params['trials'])
+    assert n_trials > 0, 'n_trials is less than 1: %r' % n_trials
+    update_delay = float(params['delay'])
+    assert update_delay > 0 and update_delay <= 1, 'update_delay is not in range: %f' % update_delay
+    log_filename = str(params['log'])
+    n_dummies = int(params['dummies'])
+    assert n_dummies >= 0, 'n_dummies is less than 0: %r' % n_dummies
+    
     ## Learning parameters
-    alpha = params['alpha']
-    gamma = params['gamma']
-    epsilon = params['epsilon']
-    initial = params['initial']
+    alpha = float(params['alpha'])
+    assert alpha >= 0 and alpha <= 1, 'alpha is not in range: %f' % alpha
+    gamma = float(params['gamma'])
+    assert gamma >= 0 and gamma <= 1, 'gamma is not in range: %f' % gamma
+    epsilon = float(params['epsilon'])
+    assert epsilon >= 0 and epsilon <= 1, 'epsilon is not in range: %f' % epsilon
+    initial = float(params['initial'])
+    assert initial >= 0, 'initial is less than 0: %f' %initial
+    
     ## Discount factor gamma depends on deadline?
     discount_deadline = params['deadline']
+    assert discount_deadline is True or discount_deadline is False, 'discount_deadline is non-binary: %s' % discount_deadline
     ## How many previous Q-tables to remember?
-    history = params['history']
+    history = int(params['history'])
+    assert history >= 0, 'history is less than 0: %r' % history
     
-    # Set up environment and agent
-    ## TODO: Delete n_dummies, fw and progress in the final submission
+    ## Set up environment and agent
     ## Create a log file for the environment for each run
     fw = open(log_filename, 'w')
 #     progress = ProgressBar(maxval=n_trials).start()
