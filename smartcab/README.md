@@ -16,7 +16,7 @@ Notes on installation of Pygame:
 - If using [anaconda](https://www.continuum.io/downloads): `conda install -c https://conda.anaconda.org/quasiben pygame`; or search the conda repo: `anaconda search -t conda pygame`.
 - [This tutorial](http://kidscancode.org/blog/2015/09/pygame_install/) is very helpful.
 
-[Pandas](http://pandas.pydata.org/) library is also required -- make you have it properly installed.
+[Pandas](http://pandas.pydata.org/) library is also required -- make sure you have it properly installed.
 
 ## Run
 
