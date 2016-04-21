@@ -39,9 +39,9 @@ There are **options** to be passed as follows:
 ## Demos
 
 The following three (3) scenarios are considered for demonstrations with fixed parameters (unless explicitly specified): `alpha=0.20`, `gamma=1-4/deadline`, `epsilon=0.10`, `initial=0`, and `deadline=True`:
-1. Learning with no history: `trials=1`, `history=0`, `delay=1.0`. Agent is expected to behave erratically with low chance of successfully reaching the destination in time. 
-2. Learning over the trials: `trials=10`, `history=0`, `delay=0.25`. Agent is expected to behave erratically at first, but then gradually improves performance as it learns over the trials. The more trials, the smarter it gets.
-3. Learning with history: `trials=1`, `history=50`, `delay=0.50`. Agent is expected to behave reasonably and successfully reach the destination in time. Agent gets smarter as more histories are considered to initialize the Q-function.
+* Learning with no history: `trials=1`, `history=0`, `delay=1.0`. Agent is expected to behave erratically with low chance of successfully reaching the destination in time. 
+* Learning over the trials: `trials=10`, `history=0`, `delay=0.25`. Agent is expected to behave erratically at first, but then gradually improves performance as it learns over the trials. The more trials, the smarter it gets.
+* Learning with history: `trials=1`, `history=50`, `delay=0.50`. Agent is expected to behave reasonably and successfully reach the destination in time. Agent gets smarter as more histories are considered to initialize the Q-function.
 
 ## Parameter Tuning
 
