@@ -1,5 +1,6 @@
 ## Import the game simulator
 import interface as bbox
+import random
 
 def get_action_by_state(state, verbose=False):
     '''
@@ -15,8 +16,8 @@ def get_action_by_state(state, verbose=False):
         ## Print the current score and time (number of current game steps)
         print ("score = {}, time = {}".format(bbox.get_score(), bbox.get_time()))
         
-    ## TODO: Always performs action '0' -- not so smart!
-    action_to_do = 0
+    ## TODO: Change this action
+    action_to_do = random.random()
     return action_to_do
 
 ## Need **not** modify the code below, but it is useful to understand what it does
@@ -49,15 +50,15 @@ def run_bbox(verbose=False):
         ## Get the current environment state vector
         state = bbox.get_state()
         ## Choose an action to perform at the current state
-        action = get_action_by_state(state)
+        action = get_action_by_state(state, verbose=verbose)
         ## Function do_action(action) returns False if the level
         ## is finished; otherwise, it returns True
         has_next = bbox.do_action(action)
     
     ## Finish the game simulation, print the earned reward
     ## When submitting solution, make sure to call finish(), which returns the sum of points obtained
-    ## This number is used as the public leader board score
+    ## during the entire simulation. This number is used as the public leader board score
     bbox.finish(verbose=True)
 
 if __name__ == "__main__":
-    run_bbox(verbose=True)
+    run_bbox(verbose=False)

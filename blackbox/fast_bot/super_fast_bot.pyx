@@ -1,7 +1,6 @@
 import interface as bbox
 cimport interface as bbox
 
-
 cdef int get_action_by_state_fast(float* state, int verbose=0):
     cdef:
         int i, action_to_do
@@ -15,9 +14,7 @@ cdef int get_action_by_state_fast(float* state, int verbose=0):
     action_to_do = 0
     return action_to_do
 
-
 cdef int n_features, n_actions
- 
  
 def prepare_bbox():
     global n_features, n_actions
@@ -28,8 +25,7 @@ def prepare_bbox():
         bbox.load_level("../levels/train_level.data", verbose=1)
         n_features = bbox.get_num_of_features()
         n_actions = bbox.get_num_of_actions()
- 
- 
+
 def run_bbox():
     cdef:
         float* state
@@ -43,3 +39,4 @@ def run_bbox():
         has_next = bbox.c_do_action(action)
  
     bbox.finish(verbose=1)
+    

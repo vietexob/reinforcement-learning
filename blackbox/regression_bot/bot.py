@@ -1,11 +1,16 @@
 '''
-TODO: What does it do?
+This model trained a separate linear regression for each of the four possible actions and 
+saved the coefficients to the external file reg_coefs.txt to be used.
 '''
 
 import interface as bbox
 import numpy as np
 
 def get_action_by_state(state):
+	'''
+	Chooses the action with maximum utility at input state.
+	'''
+	
 	best_act = -1
 	best_val = -1e9
 	
@@ -17,6 +22,7 @@ def get_action_by_state(state):
 	
 	return best_act
 
+## TODO: Are these arbitrary initial values?
 n_features = 36
 n_actions = 4
 max_time = -1
@@ -33,12 +39,20 @@ def prepare_bbox():
 		max_time = bbox.get_max_time()
 
 def load_regression_coefs(filename):
+	'''
+	Loads the trained regression coefficients from input file.
+	'''
+	
 	global reg_coefs, free_coefs
 	coefs = np.loadtxt(filename).reshape(n_actions, n_features + 1)
 	reg_coefs = coefs[:,:-1]
 	free_coefs = coefs[:,-1]
 
 def calc_reg_for_action(action, state):
+	'''
+	Computes the utility of the input action at the input state.
+	'''
+	
 	return np.dot(reg_coefs[action], state) + free_coefs[action]
 
 def run_bbox():
