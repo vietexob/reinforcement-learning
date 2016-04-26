@@ -1,5 +1,7 @@
 ## Import the game simulator
 import interface as bbox
+import pandas as pd
+import numpy as np
 import random
 
 def get_action_by_state(state, verbose=False):
@@ -25,6 +27,7 @@ n_features = n_actions = max_time = -1
 
 def prepare_bbox():
     global n_features, n_actions, max_time
+    ## TODO: Save the interactions with the environment as an output data frame
     
     ## Reset the environment to initial state, just in case
     if bbox.is_level_loaded():
@@ -61,4 +64,4 @@ def run_bbox(verbose=False):
     bbox.finish(verbose=True)
 
 if __name__ == "__main__":
-    run_bbox(verbose=False)
+    run_bbox(verbose=True)
