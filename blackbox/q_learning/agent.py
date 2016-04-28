@@ -7,7 +7,14 @@ Implementation of vanilla Q-learning to the Blackbox challenge.
 '''
 
 import interface as bbox
-from __builtin__ import True
+import math
+
+def sigmoid(x):
+    '''
+    The logistic function that maps any real number x to the range [0, 1]
+    '''
+    
+    return 1 / (1 + math.exp(-x))
 
 def get_action(state, verbose=False):
     '''
@@ -15,10 +22,13 @@ def get_action(state, verbose=False):
     The four possible actions to be returned are: {0, 1, 2, 3}.
     '''
     if verbose:
-        pass
+        for i in range(n_features):
+            sigmoid_state = sigmoid(state[i])
+            state_var = int(sigmoid_state * 10)
+            print ("state[%d] = %f" % (i, state_var))
     
     reward = bbox.get_score()
-#     print reward
+    print reward
     action = 0
     return action
 
