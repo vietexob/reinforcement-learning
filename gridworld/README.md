@@ -6,7 +6,7 @@ This program implements the *canonical* example of a Markov decision process (MD
 The robot is initially located at the bottom right corner of the grid. At each time step, it makes a move according to a "learned" policy. Each move changes its location according to the move. However, The purpose of MDP is to 
 
 ## Dependencies:
-The following packages are required: `numpy` and `progressbar`. Installing [Anaconda Python](https://www.continuum.io/downloads) is highly recommended to resolve dependency problems.
+The following packages are required: `numpy` and `progressbar`. Installing [Anaconda Python](https://www.continuum.io/downloads) is highly recommended to preempt most dependency problems.
 
 ## Run
 
