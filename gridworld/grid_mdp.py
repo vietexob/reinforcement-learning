@@ -17,8 +17,9 @@ import sys
 
 def parse():
     '''
-    Parse command/terminal line.
+    Parses argumnents from the terminal.
     '''
+    
     class CustomFormatter(ArgumentDefaultsHelpFormatter, RawDescriptionHelpFormatter):
         pass
     parser = ArgumentParser(formatter_class=CustomFormatter,
@@ -36,11 +37,12 @@ def build_environment(nrow=3, ncol=4, goal_reward=1, penalty=-1):
     '''
     Sets up the MDP environment.
     '''
+
     ## Set the initial rewards
     global rewards
     rewards = np.zeros(shape=(nrow, ncol))
     
-    ## The set of states are the grid cells
+    ## The finite set of states are the grid cells
     global states 
     states = product(range(nrow), range(ncol))
     states = list(states) # convert iterator to list
@@ -99,6 +101,7 @@ def act(cur_state, action):
     '''
     Moves the agent through the states based on action taken.
     '''
+    
     if cur_state == wall_state:
         sys.exit('Cannot enter wall state!')
     
