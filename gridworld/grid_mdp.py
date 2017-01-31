@@ -30,6 +30,7 @@ def parse():
     parser.add_argument('-g', '--goal', type=int, default=1, help='Goal reward')
     parser.add_argument('-p', '--penalty', type=int, default=-1, help='Penalty')
     parser.add_argument('-d', '--discount', type=float, default=0.95, help='Discount')
+    parser.add_argument('-v', '--value', type=int, default=1, help='Do value iteration?')
     
     return vars(parser.parse_args())
     
@@ -275,15 +276,19 @@ if __name__ == '__main__':
     goal_reward = params['goal']
     penalty = params['penalty']
     gamma = params['discount']
+    is_value = params['value'] == 1
     
     build_environment(nrow=nrow, ncol=ncol, goal_reward=goal_reward, penalty=penalty)
 #     print rewards
 #     print values
 #     print transition
     
-#     policy = value_iteration(nrow, ncol, goal_reward=goal_reward, penalty=penalty,
-#                              gamma=gamma, n_iter=1000)
-    policy = policy_iteration(nrow, ncol, gamma=gamma, n_iter=1000)
+    if is_value:
+        policy = value_iteration(nrow, ncol, goal_reward=goal_reward, penalty=penalty,
+                                 gamma=gamma, n_iter=1000)
+    else:
+        policy = policy_iteration(nrow, ncol, gamma=gamma, n_iter=1000)
+        
     print policy
     print values
     
