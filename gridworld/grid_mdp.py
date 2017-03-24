@@ -1,7 +1,9 @@
 '''
 Created on Mar 13, 2016
 
-TODO: Add some description here.
+    This program implements the canonical example of a Markov decision process (MDP):
+    A robot navigating in a grid world with perfect information. Refer to the accompanying
+    README file for detailed description.
 
 @author: trucvietle
 '''
