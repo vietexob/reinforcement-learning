@@ -120,7 +120,7 @@ def act(cur_state, action):
     next_row = cur_state[0] + action_value[0]
     next_col = cur_state[1] + action_value[1]
     
-    ## Constrained by the edge of the grid
+    ## Constrained by the boundaries of the grid
     next_state[0] = min(max(states)[0], max(0, next_row))
     next_state[1] = min(max(states)[1], max(0, next_col))
     next_state = tuple(next_state) # convert from list to tuple
@@ -166,7 +166,7 @@ def value_iteration(nrow=3, ncol=4, goal_reward=1, penalty=-1,
                 for action in actions:
                     q_values[counter] = bellman_update(state, action, gamma)
                     counter += 1
-                max_q = max(q_values)
+                max_q = max(q_values) # choose the action that maximizes the Q-function
                 if math.isnan(max_q):
                     sys.exit('max_q is nan!')
                 max_idx = q_values.index(max_q)
@@ -224,7 +224,6 @@ def policy_iteration(nrow=3, ncol=4, gamma=1, n_iter=1000):
         if state != goal_state and state != trap_state and state != wall_state:
             rand_action = random.choice(actions)
             policy[state] = rand_action
-#     print policy
     
     ## Define a progress bar
     progress = ProgressBar(maxval=n_iter).start()
@@ -233,7 +232,6 @@ def policy_iteration(nrow=3, ncol=4, gamma=1, n_iter=1000):
         ## Compute the value of the current policy
         ## Solve the linear equations
         transition_matrix = get_transition_matrix(policy)
-#         print transition_matrix
         b = np.zeros(shape=(1, len(states))) # the RHS - rewards
         for state in states:
             state_idx = states.index(state)
@@ -251,7 +249,6 @@ def policy_iteration(nrow=3, ncol=4, gamma=1, n_iter=1000):
             if state != wall_state:
                 state_idx = states.index(state)
                 values[state] = value[state_idx]
-#         print values
         
         is_changed = False
         for state in states:
@@ -267,7 +264,6 @@ def policy_iteration(nrow=3, ncol=4, gamma=1, n_iter=1000):
             progress.finish()
             break
         else:
-#             print policy
             progress.update(i+1)
     return policy
 
@@ -281,9 +277,6 @@ if __name__ == '__main__':
     is_value = params['value'] == 1
     
     build_environment(nrow=nrow, ncol=ncol, goal_reward=goal_reward, penalty=penalty)
-#     print rewards
-#     print values
-#     print transition
     
     if is_value:
         policy = value_iteration(nrow, ncol, goal_reward=goal_reward, penalty=penalty,
